@@ -1,0 +1,413 @@
+openapi: 3.0.0
+info:
+  title: PPPP Empreendedores API
+  description: API para conectar empreendedores locais e clientes.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  # Autenticação
+  /auth/register:
+    post:
+      summary: Registro de usuários
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+              required:
+                - username
+                - password
+                - role
+      responses:
+        '201':
+          description: Usuário registrado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  username:
+                    type: string
+                  role:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Dados inválidos
+        '409':
+          description: Usuário já existe
+  /auth/login:
+    post:
+      summary: Login de usuários
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: Login bem-sucedido
+        '401':
+          description: Credenciais inválidas
+
+  # Usuários
+  /users:
+    get:
+      summary: Lista todos os usuários registrados
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de todos os usuários
+        '403':
+          description: Acesso negado
+
+  # Categorias
+  /business/categories:
+    get:
+      summary: Lista todas as categorias
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de todas as categorias
+        '403':
+          description: Acesso negado
+    post:
+      summary: Registro de categorias
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        '201':
+          description: Categoria criada com sucesso
+        '400':
+          description: Dados inválidos
+        '403':
+          description: Acesso negado
+        '409':
+          description: Categoria já existe
+    put:
+      summary: Edição de categorias
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+              required:
+                - id
+                - name
+      responses:
+        '200':
+          description: Categoria atualizada com sucesso
+        '400':
+          description: Dados inválidos
+        '403':
+          description: Acesso negado
+        '404':
+          description: Categoria não encontrada
+    delete:
+      summary: Remoção de categorias
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Categoria removida com sucesso
+        '403':
+          description: Acesso negado
+        '404':
+          description: Categoria não encontrada
+
+  # Empreendimentos
+  /business:
+    get:
+      summary: Lista todos os empreendimentos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de todos os empreendimentos
+        '403':
+          description: Acesso negado
+  /business/by-category:
+    get:
+      summary: Lista empreendimentos por categoria
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Lista de empreendimentos por categoria
+        '403':
+          description: Acesso negado
+        '404':
+          description: Categoria não encontrada
+  /business/by-name:
+    get:
+      summary: Busca empreendimentos por nome
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Lista de empreendimentos por nome
+        '403':
+          description: Acesso negado
+        '404':
+          description: Empreendimento não encontrado
+  /business/businesses:
+    post:
+      summary: Registro de empreendimentos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                category:
+                  type: string
+              required:
+                - name
+                - category
+      responses:
+        '201':
+          description: Empreendimento registrado com sucesso
+        '400':
+          description: Dados inválidos
+        '403':
+          description: Acesso negado
+    put:
+      summary: Edição de empreendimentos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                category:
+                  type: string
+              required:
+                - id
+                - name
+                - category
+      responses:
+        '200':
+          description: Empreendimento atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '403':
+          description: Acesso negado
+        '404':
+          description: Empreendimento não encontrado
+    delete:
+      summary: Remoção de empreendimentos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Empreendimento removido com sucesso
+        '403':
+          description: Acesso negado
+        '404':
+          description: Empreendimento não encontrado
+
+  # Produtos
+  /products:
+    get:
+      summary: Lista todos os produtos cadastrados
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de todos os produtos
+        '403':
+          description: Acesso negado
+    post:
+      summary: Registro de produtos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                businessId:
+                  type: integer
+                name:
+                  type: string
+                price:
+                  type: number
+                isStarred:
+                  type: boolean
+              required:
+                - businessId
+                - name
+                - price
+      responses:
+        '201':
+          description: Produto registrado com sucesso
+        '400':
+          description: Dados inválidos
+        '403':
+          description: Acesso negado
+    put:
+      summary: Edição de produtos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                businessId:
+                  type: integer
+                name:
+                  type: string
+                price:
+                  type: number
+                isStarred:
+                  type: boolean
+              required:
+                - id
+                - businessId
+                - name
+                - price
+      responses:
+        '200':
+          description: Produto atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '403':
+          description: Acesso negado
+        '404':
+          description: Produto não encontrado
+    delete:
+      summary: Remoção de produtos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Produto removido com sucesso
+        '403':
+          description: Acesso negado
+        '404':
+          description: Produto não encontrado
+  /products/starred:
+    get:
+      summary: Busca produtos estrela (favoritos dos clientes)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de produtos estrela
+        '403':
+          description: Acesso negado
+  /products/by-name:
+    get:
+      summary: Busca de produto por nome
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Lista de produtos por nome
+        '403':
+          description: Acesso negado
+        '404':
+          description: Produto não encontrado
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
