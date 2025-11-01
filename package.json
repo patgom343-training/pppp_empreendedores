@@ -1,10 +1,11 @@
 {
   "name": "pppp_empreendedores",
   "version": "1.0.0",
-  "description": "",
+  "description": "API Rest para conectar empreendedores locais e clientes.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,14 @@
   "bugs": {
     "url": "https://github.com/patgom343-training/pppp_empreendedores/issues"
   },
-  "homepage": "https://github.com/patgom343-training/pppp_empreendedores#readme"
+  "homepage": "https://github.com/patgom343-training/pppp_empreendedores#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
