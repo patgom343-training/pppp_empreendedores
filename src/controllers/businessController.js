@@ -11,9 +11,9 @@ const createCategory = (req, res) => {
 };
 
 const createBusiness = (req, res) => {
-  const { name, category } = req.body;
+  const { name, category, description, productIds = [], isStarred } = req.body;
   try {
-    addBusiness(name, category, req.user.username);
+    addBusiness(name, category, req.user.username, description, productIds, isStarred);
     res.status(201).json({ message: 'Business registered successfully' });
   } catch (error) {
     res.status(400).json({ message: error.message });

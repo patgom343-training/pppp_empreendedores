@@ -1,3 +1,4 @@
+
 **Objetivo**
 Criar uma API Rest para o registro de empreendimentos e produtos para conectar empreendedores locais e clientes.
 **Contexto**
@@ -19,3 +20,5 @@ Criar uma API Rest para o registro de empreendimentos e produtos para conectar e
 - Armazene os dados da API em um banco de dados em memória
 - Utilize a biblioteca express para construir a API Rest
 - Faça com que a autenticação seja parte do Middleware, utilizando token JWT como modelo de autenticação, e implemente as regras de autenticação seguindo as informações descritas no contexto.
+- Para registrar um empreendimento deve estar registrada a categoria.
+- Para registrar um produto deve estar registrado o empreendimento. 

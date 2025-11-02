@@ -14,25 +14,25 @@ const businesses = [
     id: 1,
     name: 'Restaurante Saboroso',
     category: 'gastronomia',
+        owner: 'admin',
     description: 'Um restaurante com pratos deliciosos.',
     products: [
       { id: 1, name: 'Feijoada Completa', price: 25.0, isStarred: true },
       { id: 2, name: 'Coxinha Gourmet', price: 5.0, isStarred: false }
     ],
-    isStarred: false,
-    owner: 'admin'
+    isStarred: false
   },
   {
     id: 2,
     name: 'Artesanato Local',
     category: 'artesanato',
+    owner: 'admin',
     description: 'Produtos artesanais feitos à mão.',
     products: [
       { id: 1, name: 'Vaso de Cerâmica', price: 40.0, isStarred: true },
       { id: 2, name: 'Cesta de Palha', price: 30.0, isStarred: false }
     ],
-    isStarred: false,
-    owner: 'admin'
+    isStarred: false
   }
 ];
 

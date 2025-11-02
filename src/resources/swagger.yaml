@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: PPPP Empreendedores API
-  description: API para conectar empreendedores locais e clientes.
+  title: PPP Local Business API
+  description: API that helps connect local business and their customers.
   version: 1.0.0
 servers:
   - url: http://localhost:3000
@@ -9,6 +9,8 @@ paths:
   # Autenticação
   /auth/register:
     post:
+      tags:
+        - Authentication
       summary: Registro de usuários
       requestBody:
         required: true
@@ -50,6 +52,8 @@ paths:
           description: Usuário já existe
   /auth/login:
     post:
+      tags:
+        - Authentication
       summary: Login de usuários
       requestBody:
         required: true
@@ -74,6 +78,8 @@ paths:
   # Usuários
   /users:
     get:
+      tags:
+        - Users
       summary: Lista todos os usuários registrados
       security:
         - bearerAuth: []
@@ -85,16 +91,9 @@ paths:
 
   # Categorias
   /business/categories:
-    get:
-      summary: Lista todas as categorias
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Lista de todas as categorias
-        '403':
-          description: Acesso negado
     post:
+      tags:
+        - Business
       summary: Registro de categorias
       security:
         - bearerAuth: []
@@ -119,6 +118,8 @@ paths:
         '409':
           description: Categoria já existe
     put:
+      tags:
+        - Business
       summary: Edição de categorias
       security:
         - bearerAuth: []
@@ -146,6 +147,8 @@ paths:
         '404':
           description: Categoria não encontrada
     delete:
+      tags:
+        - Business
       summary: Remoção de categorias
       security:
         - bearerAuth: []
@@ -161,11 +164,111 @@ paths:
         '403':
           description: Acesso negado
         '404':
-          description: Categoria não encontrada
-
+          description: Categoria não encontrada 
+    get:
+      tags:
+        - Business
+      summary: Lista todas as categorias
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de todas as categorias
+        '403':
+          description: Acesso negado
   # Empreendimentos
+  /business/businesses:
+    post:
+      tags:
+        - Business
+      summary: Registro de empreendimentos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                category:
+                  type: string
+                description:
+                  type: string
+                isStarred:
+                  type: boolean
+              required:
+                - name
+                - category
+                - description
+      responses:
+        '201':
+          description: Empreendimento registrado com sucesso
+        '400':
+          description: Dados inválidos
+        '403':
+          description: Acesso negado
+    put:
+      tags:
+        - Business
+      summary: Edição de empreendimentos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                category:
+                  type: string
+                description:
+                  type: string
+                isStarred:
+                  type: boolean
+              required:
+                - id
+                - name
+                - category
+      responses:
+        '200':
+          description: Empreendimento atualizado com sucesso
+        '400':
+          description: Dados inválidos
+        '403':
+          description: Acesso negado
+        '404':
+          description: Empreendimento não encontrado
+    delete:
+      tags:
+        - Business
+      summary: Remoção de empreendimentos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Empreendimento removido com sucesso
+        '403':
+          description: Acesso negado
+        '404':
+          description: Empreendimento não encontrado
   /business:
     get:
+      tags:
+        - Business
       summary: Lista todos os empreendimentos
       security:
         - bearerAuth: []
@@ -176,6 +279,8 @@ paths:
           description: Acesso negado
   /business/by-category:
     get:
+      tags:
+        - Business
       summary: Lista empreendimentos por categoria
       security:
         - bearerAuth: []
@@ -194,6 +299,8 @@ paths:
           description: Categoria não encontrada
   /business/by-name:
     get:
+      tags:
+        - Business
       summary: Busca empreendimentos por nome
       security:
         - bearerAuth: []
@@ -210,92 +317,40 @@ paths:
           description: Acesso negado
         '404':
           description: Empreendimento não encontrado
-  /business/businesses:
-    post:
-      summary: Registro de empreendimentos
+  /business/starred:
+    get:
+      tags:
+        - Business
+      summary: Lista empreendimentos marcados como estrela
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                category:
-                  type: string
-              required:
-                - name
-                - category
-      responses:
-        '201':
-          description: Empreendimento registrado com sucesso
-        '400':
-          description: Dados inválidos
-        '403':
-          description: Acesso negado
-    put:
-      summary: Edição de empreendimentos
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
-                category:
-                  type: string
-              required:
-                - id
-                - name
-                - category
       responses:
         '200':
-          description: Empreendimento atualizado com sucesso
-        '400':
-          description: Dados inválidos
+          description: Lista de empreendimentos estrela
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    category:
+                      type: string
+                    description:
+                      type: string
+                    isStarred:
+                      type: boolean
         '403':
           description: Acesso negado
-        '404':
-          description: Empreendimento não encontrado
-    delete:
-      summary: Remoção de empreendimentos
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: query
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: Empreendimento removido com sucesso
-        '403':
-          description: Acesso negado
-        '404':
-          description: Empreendimento não encontrado
-
   # Produtos
   /products:
-    get:
-      summary: Lista todos os produtos cadastrados
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Lista de todos os produtos
-        '403':
-          description: Acesso negado
     post:
+      tags:
+        - Products
       summary: Registro de produtos
       security:
         - bearerAuth: []
@@ -308,6 +363,7 @@ paths:
               properties:
                 businessId:
                   type: integer
+                  description: ID of the existing business. The business must be registered before adding products.
                 name:
                   type: string
                 price:
@@ -326,6 +382,8 @@ paths:
         '403':
           description: Acesso negado
     put:
+      tags:
+        - Products
       summary: Edição de produtos
       security:
         - bearerAuth: []
@@ -361,15 +419,24 @@ paths:
         '404':
           description: Produto não encontrado
     delete:
+      tags:
+        - Products
       summary: Remoção de produtos
       security:
         - bearerAuth: []
       parameters:
+        - name: businessId
+          in: query
+          schema:
+            type: integer
+          required: true
+          description: ID do empreendimento ao qual o produto pertence.
         - name: id
           in: query
           schema:
             type: integer
           required: true
+          description: ID do produto a ser removido.
       responses:
         '200':
           description: Produto removido com sucesso
@@ -377,8 +444,39 @@ paths:
           description: Acesso negado
         '404':
           description: Produto não encontrado
+    get:
+      tags:
+        - Products
+      summary: Lista todos os produtos cadastrados
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de todos os produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    businessId:
+                      type: integer
+                      description: ID do empreendimento ao qual o produto pertence.
+                    name:
+                      type: string
+                    price:
+                      type: number
+                    isStarred:
+                      type: boolean
+        '403':
+          description: Acesso negado
   /products/starred:
     get:
+      tags:
+        - Products
       summary: Busca produtos estrela (favoritos dos clientes)
       security:
         - bearerAuth: []
@@ -389,6 +487,8 @@ paths:
           description: Acesso negado
   /products/by-name:
     get:
+      tags:
+        - Products
       summary: Busca de produto por nome
       security:
         - bearerAuth: []
