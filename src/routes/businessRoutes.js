@@ -3,8 +3,16 @@ const authenticateToken = require('../middleware/authenticateToken');
 const { createCategory, createBusiness, listCategories, listBusinesses } = require('../controllers/businessController');
 const router = express.Router();
 
-router.post('/categories', authenticateToken, createCategory);
-router.post('/businesses', authenticateToken, createBusiness);
+// Middleware to restrict access based on role
+const restrictToBusiness = (req, res, next) => {
+  if (req.user.role !== 'business') {
+    return res.status(403).json({ message: 'Access restricted to business users only' });
+  }
+  next();
+};
+
+router.post('/categories', authenticateToken, restrictToBusiness, createCategory);
+router.post('/businesses', authenticateToken, restrictToBusiness, createBusiness);
 router.get('/categories', authenticateToken, listCategories);
 router.get('/businesses', authenticateToken, listBusinesses);
 router.get('/by-category', authenticateToken, (req, res) => {
@@ -32,7 +40,7 @@ router.get('/by-name', authenticateToken, (req, res) => {
   res.json(results);
 });
 router.get('/', authenticateToken, listBusinesses);
-router.put('/categories', authenticateToken, (req, res) => {
+router.put('/categories', authenticateToken, restrictToBusiness, (req, res) => {
   const { id, name } = req.body;
 
   if (!id || !name) {
@@ -49,7 +57,7 @@ router.put('/categories', authenticateToken, (req, res) => {
   category.name = name;
   res.status(200).json({ message: 'Category updated successfully' });
 });
-router.delete('/categories', authenticateToken, (req, res) => {
+router.delete('/categories', authenticateToken, restrictToBusiness, (req, res) => {
   const { id } = req.query;
 
   if (!id) {
@@ -66,7 +74,7 @@ router.delete('/categories', authenticateToken, (req, res) => {
   categories.splice(categoryIndex, 1);
   res.status(200).json({ message: 'Category deleted successfully' });
 });
-router.put('/businesses', authenticateToken, (req, res) => {
+router.put('/businesses', authenticateToken, restrictToBusiness, (req, res) => {
   const { id, name, category, description, isStarred } = req.body;
 
   if (!id || !name || !category) {
@@ -87,7 +95,7 @@ router.put('/businesses', authenticateToken, (req, res) => {
 
   res.status(200).json({ message: 'Business updated successfully' });
 });
-router.delete('/businesses', authenticateToken, (req, res) => {
+router.delete('/businesses', authenticateToken, restrictToBusiness, (req, res) => {
   const { id } = req.query;
 
   if (!id) {

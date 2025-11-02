@@ -6,9 +6,12 @@ Criar uma API Rest para o registro de empreendimentos e produtos para conectar e
 - Para que eu possa usar as funcionalidades de registro de empreendimento, registro de categoria  e registro de produto, preciso fazer login como empreendedor.
 - Exemplo de categorias:  gastronomia, artesanato e moda.
 - Para que eu possa usar especificamente só as funcionalidades de pesquisar por empreendimentos e produtos preciso fazer login como cliente. 
-- Clientes apenas fazem pesquisa de empreendimentos por nome, empreendimentos por rubro e produtos (não podem registar, editar ou excluir dados), empreendedores acessam todas as funcionalidades do sistema.
+- Clientes apenas fazem pesquisa de empreendimentos por nome, empreendimentos por categoria e produtos (não podem registar, editar ou excluir dados), empreendedores acessam todas as funcionalidades do sistema.
 - Os produtos podem ser classificados como “estrela”, representando o produto favorito ou mais vendido de cada empreendedor.  
 - Os empreendedores devem associar cada empreendimento a uma categoria.
+Usuários com o papel customer podem acessar apenas os endpoints GET.
+Usuários com o papel customer são impedidos de acessar endpoints POST.
+Usuários com o papel business têm acesso total às funcionalidades.
 
 
 **Regras**

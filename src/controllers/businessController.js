@@ -11,9 +11,9 @@ const createCategory = (req, res) => {
 };
 
 const createBusiness = (req, res) => {
-  const { name, category, description, productIds = [], isStarred } = req.body;
+  const { name, category, description, productIds = [], isStarred, contact } = req.body;
   try {
-    addBusiness(name, category, req.user.username, description, productIds, isStarred);
+    addBusiness(name, category, req.user.username, description, productIds, isStarred, contact);
     res.status(201).json({ message: 'Business registered successfully' });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -31,7 +31,16 @@ const listCategories = (req, res) => {
 
 const listBusinesses = (req, res) => {
   try {
-    const businesses = require('../models/database').businesses;
+    const businesses = require('../models/database').businesses.map(business => ({
+      id: business.id,
+      name: business.name,
+      category: business.category,
+      owner: business.owner,
+      description: business.description,
+      products: business.products,
+      isStarred: business.isStarred,
+      contact: business.contact
+    }));
     res.status(200).json(businesses);
   } catch (error) {
     res.status(500).json({ message: error.message });

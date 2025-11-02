@@ -1,17 +1,30 @@
-# PPPP Empreendedores API
+# PPP Local Business API
 
 ## Descrição
 
-A PPPP Empreendedores API é uma aplicação para conectar empreendedores locais e clientes. Ela permite o registro de empreendedores, clientes, empreendimentos, categorias e produtos, além de oferecer funcionalidades de busca e gerenciamento.
+A PPP Local Business API é uma aplicação para conectar empreendedores locais e clientes. Ela permite o registro de empreendedores, clientes, empreendimentos, categorias e produtos, além de oferecer funcionalidades de busca e gerenciamento.
 
 ## Funcionalidades
 
-- Registro e login de empreendedores e clientes.
-- Registro, edição e remoção de empreendimentos, categorias e produtos (apenas para empreendedores).
-- Busca de empreendimentos por nome, categoria e empreendimentos destacados (apenas para clientes).
-- Busca de produtos (apenas para clientes).
-- Autenticação via JWT.
-- Documentação da API disponível via Swagger.
+- **Autenticação e Autorização**:
+  - Registro e login de usuários com dois papéis distintos:
+    - `customer`: Pode acessar apenas os endpoints de registro, login e todos as consultas por empreendimentos e produtos.
+    - `business`: Pode acessar todas as funcionalidades do sistema.
+  - Autenticação via JWT.
+
+- **Gestão de Empreendimentos e Categorias** (apenas para `business`):
+  - Registro, edição e remoção de empreendimentos.
+  - Registro, edição e remoção de categorias.
+
+- **Gestão de Produtos** (apenas para `business`):
+  - Registro, edição e remoção de produtos.
+
+- **Funcionalidades para Clientes (`customer`)**:
+  - Busca de empreendimentos por nome, categoria e empreendimentos destacados.
+  - Busca de produtos.
+
+- **Documentação da API**:
+  - Disponível via Swagger.
 
 ## Tecnologias Utilizadas
 
@@ -20,6 +33,8 @@ A PPPP Empreendedores API é uma aplicação para conectar empreendedores locais
 - JWT (Json Web Token)
 - Swagger UI Express
 - js-yaml
+- Jest (para testes)
+- Supertest (para testes de integração)
 
 ## Instalação
 
@@ -30,7 +45,7 @@ A PPPP Empreendedores API é uma aplicação para conectar empreendedores locais
 
 2. Navegue até o diretório do projeto:
    ```bash
-   cd pppp_empreendedores
+   cd ppp_local_business_api
    ```
 
 3. Instale as dependências:
@@ -50,27 +65,37 @@ A PPPP Empreendedores API é uma aplicação para conectar empreendedores locais
    http://localhost:3000/api-docs
    ```
 
+## Testes
+
+1. Para rodar os testes automatizados:
+   ```bash
+   npm test
+   ```
+
 ## Endpoints Principais
 
-- **POST /auth/register**: Registro de usuários.
-- **POST /auth/login**: Login de usuários.
-- **POST /business/categories**: Registro de categorias (apenas para empreendedores).
-- **PUT /business/categories**: Edição de categorias (apenas para empreendedores).
-- **DELETE /business/categories**: Remoção de categorias (apenas para empreendedores).
-- **POST /business/businesses**: Registro de empreendimentos (apenas para empreendedores).
-- **PUT /business/businesses**: Edição de empreendimentos (apenas para empreendedores).
-- **DELETE /business/businesses**: Remoção de empreendimentos (apenas para empreendedores).
-- **POST /products**: Registro de produtos (apenas para empreendedores).
-- **PUT /products**: Edição de produtos (apenas para empreendedores).
-- **DELETE /products**: Remoção de produtos (apenas para empreendedores).
-- **GET /search/businesses**: Busca de empreendimentos (apenas para clientes).
-- **GET /search/products**: Busca de produtos (apenas para clientes).
-- **GET /starred**: Busca de empreendimentos destacados (apenas para clientes).
+- **Autenticação**:
+  - **POST /auth/register**: Registro de usuários.
+  - **POST /auth/login**: Login de usuários.
 
-## Contribuição
+- **Gestão de Categorias** (apenas para `business`):
+  - **POST /business/categories**: Registro de categorias.
+  - **PUT /business/categories**: Edição de categorias.
+  - **DELETE /business/categories**: Remoção de categorias.
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+- **Gestão de Empreendimentos** (apenas para `business`):
+  - **POST /business/businesses**: Registro de empreendimentos.
+  - **PUT /business/businesses**: Edição de empreendimentos.
+  - **DELETE /business/businesses**: Remoção de empreendimentos.
 
-## Licença
+- **Gestão de Produtos** (apenas para `business`):
+  - **POST /products**: Registro de produtos.
+  - **PUT /products**: Edição de produtos.
+  - **DELETE /products**: Remoção de produtos.
 
-Este projeto está licenciado sob a licença ISC.
+- **Funcionalidades para Clientes** (`customer`):
+  - **GET /search/businesses**: Busca de empreendimentos. 
+  - **GET /search/products**: Busca de produtos.
+  - **GET /starred**: Busca de empreendimentos destacados.
+
+

@@ -9,7 +9,7 @@ const addCategory = (name) => {
   categories.push(newCategory);
 };
 
-const addBusiness = (name, category, owner, description, productIds = [], isStarred = false) => {
+const addBusiness = (name, category, owner, description, productIds = [], isStarred = false, contact) => {
   if (!categories.some(cat => cat.name === category)) {
     throw new Error(`Category '${category}' not found. Please register the category first.`);
   }
@@ -24,7 +24,7 @@ const addBusiness = (name, category, owner, description, productIds = [], isStar
   });
 
   const newId = businesses.length > 0 ? businesses[businesses.length - 1].id + 1 : 1;
-  const newBusiness = { id: newId, name, category, owner, description, products: associatedProducts, isStarred };
+  const newBusiness = { id: newId, name, category, owner, description, products: associatedProducts, isStarred, contact };
   businesses.push(newBusiness);
 };
 

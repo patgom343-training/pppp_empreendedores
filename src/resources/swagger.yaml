@@ -199,10 +199,14 @@ paths:
                   type: string
                 isStarred:
                   type: boolean
+                contact:
+                  type: string
+                  description: Informações de contato do empreendimento.
               required:
                 - name
                 - category
                 - description
+                - contact
       responses:
         '201':
           description: Empreendimento registrado com sucesso
@@ -233,10 +237,14 @@ paths:
                   type: string
                 isStarred:
                   type: boolean
+                contact:
+                  type: string
+                  description: Informações de contato do empreendimento.
               required:
                 - id
                 - name
                 - category
+                - contact
       responses:
         '200':
           description: Empreendimento atualizado com sucesso

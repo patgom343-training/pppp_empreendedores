@@ -3,7 +3,7 @@ const users = [
     id: 100,
     username: 'admin',
     password: 'admin123',
-    role: 'empreendedor',
+    role: 'business',
     email: 'admin@example.com',
     createdAt: new Date()
   }
@@ -20,7 +20,8 @@ const businesses = [
       { id: 1, name: 'Feijoada Completa', price: 25.0, isStarred: true },
       { id: 2, name: 'Coxinha Gourmet', price: 5.0, isStarred: false }
     ],
-    isStarred: false
+    isStarred: false,
+    contact: 'restaurante@example.com'
   },
   {
     id: 2,
@@ -32,7 +33,8 @@ const businesses = [
       { id: 1, name: 'Vaso de Cerâmica', price: 40.0, isStarred: true },
       { id: 2, name: 'Cesta de Palha', price: 30.0, isStarred: false }
     ],
-    isStarred: false
+    isStarred: false,
+    contact: 'artesanato@example.com'
   }
 ];
 

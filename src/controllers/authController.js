@@ -2,6 +2,12 @@ const { registerUser, loginUser } = require('../services/authService');
 
 const register = (req, res) => {
   const { username, password, role } = req.body;
+
+  // Validate role
+  if (!['customer', 'business'].includes(role)) {
+    return res.status(400).json({ message: 'Invalid role. Allowed roles are customer and business.' });
+  }
+
   try {
     registerUser(username, password, role);
     res.status(201).json({ message: 'User registered successfully' });
