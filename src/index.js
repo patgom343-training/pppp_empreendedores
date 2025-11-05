@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -14,6 +15,7 @@ const yaml = require('js-yaml');
 
 const swaggerDocument = yaml.load(fs.readFileSync('./src/resources/swagger.yaml', 'utf8'));
 
+app.use(cors());
 app.use(express.json());
 
 // Placeholder for routes

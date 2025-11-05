@@ -20,7 +20,7 @@ const businesses = [
       { id: 1, name: 'Feijoada Completa', price: 25.0, isStarred: true },
       { id: 2, name: 'Coxinha Gourmet', price: 5.0, isStarred: false }
     ],
-    isStarred: false,
+    isStarred: true,
     contact: 'restaurante@example.com'
   },
   {

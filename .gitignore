@@ -1,1 +1,4 @@
 node_modules/
+mochawesome-report/
+html-report.html
+.env
