@@ -1,6 +1,7 @@
 require('dotenv').config();
 const request = require('supertest');
 const { expect } = require('chai');
+const { gerarUsuario } = require('./helpers/usuariosRandom.js');
 
 const baseUrl = process.env.BASE_URL_REST;
 
@@ -8,82 +9,73 @@ describe('Role Permissions', () => {
   let customerToken;
 
   before(async () => {
-    // Registra e faz login de um usuário "customer"
+    // Gera um novo usuário random do tipo customar
+    const novoUsuario = gerarUsuario('customer');
+    // Registra o novo usuário
     await request(baseUrl)
       .post('/auth/register')
-      .send({
-            username: 'customerUser',
-            password: 'password123',
-            role: 'customer'
-            });
-
-    const customerLogin = await request(baseUrl)
+      .set('Content-Type', 'application/json')
+      .send(novoUsuario);
+    // Faz login com o novo usuário
+    const businessLogin = await request(baseUrl)
       .post('/auth/login')
       .send({
-            username: 'customerUser',
-            password: 'password123'
-            });
-
-    customerToken = customerLogin.body.token;
+        username: novoUsuario.username,
+        password: novoUsuario.password
+      });
+    customerToken = businessLogin.body.token;
   });
 
   //***TESTS CUSTOMER business/categories***
   describe('CUSTOMER /business/categories', () => {
     
     it('Confirma que usuario de tipo custumer NÃO pode acessar POST endpoints', async () => {
-    const resposta = await request(baseUrl)
-      .post('/business/categories')
-      .set('Authorization', `Bearer ${customerToken}`)
-      .send({
+      const resposta = await request(baseUrl)
+        .post('/business/categories')
+        .set('Authorization', `Bearer ${customerToken}`)
+        .send({
           name: "brinquedos"
-          });
-      //console.log(resposta.body);
+        });
       expect(resposta.status).to.equal(403);
-      expect(resposta.body.message).to.equal('Access restricted to business users only')
+      expect(resposta.body.message).to.equal('Access restricted to business users only');
     });
 
     it('Confirma que usuario de tipo custumer NÃO pode acessar PUT endpoints', async () => {
-    const resposta = await request(baseUrl)
-      .put('/business/categories')
-      .set('Authorization', `Bearer ${customerToken}`)
-      .send({
+      const resposta = await request(baseUrl)
+        .put('/business/categories')
+        .set('Authorization', `Bearer ${customerToken}`)
+        .send({
           id: 5,
           name: "Beleza",
-          });
-          
-      //console.log(resposta.body);
+        });
       expect(resposta.status).to.equal(403);
-      expect(resposta.body.message).to.equal('Access restricted to business users only')
+      expect(resposta.body.message).to.equal('Access restricted to business users only');
     });
 
     it('Confirma que usuario de tipo custumer NÃO pode acessar DELETE endpoints', async () => {
-    const resposta = await request(baseUrl)
-      .delete('/business/categories')
-      .set('Authorization', `Bearer ${customerToken}`)
-      .query({
+      const resposta = await request(baseUrl)
+        .delete('/business/categories')
+        .set('Authorization', `Bearer ${customerToken}`)
+        .query({
           id: "2",
-          });
-          
-      //console.log(resposta.body);
+        });
       expect(resposta.status).to.equal(403);
-      expect(resposta.body.message).to.equal('Access restricted to business users only')
-     });
+      expect(resposta.body.message).to.equal('Access restricted to business users only');
+    });
 
     it('Confirma que usuario de tipo custumer pode acessar GET endpoints', async () => {
-
-        const resposta = await request(baseUrl)
-          .get('/business/categories')
-          .set('Authorization', `Bearer ${customerToken}`)
-          //console.log(resposta.body);
-          expect(resposta.status).to.equal(200);
-          expect(resposta.body).to.be.an('array').that.is.not.empty;
-          resposta.body.forEach(item => {
-            expect(item).to.have.property('id');
-            expect(item.id).to.be.a('number');
-            expect(item).to.have.property('name');
-            expect(item.name).to.be.a('string')
-          });
+      const resposta = await request(baseUrl)
+        .get('/business/categories')
+        .set('Authorization', `Bearer ${customerToken}`);
+      expect(resposta.status).to.equal(200);
+      expect(resposta.body).to.be.an('array').that.is.not.empty;
+      resposta.body.forEach(item => {
+        expect(item).to.have.property('id');
+        expect(item.id).to.be.a('number');
+        expect(item).to.have.property('name');
+        expect(item.name).to.be.a('string');
       });
+    });
   });
 
   //***TESTS CUSTOMER business/businesses***

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const request = require('supertest');
 const { expect } = require('chai');
+const { gerarUsuario } = require('./helpers/usuariosRandom.js');
 
 const baseUrl = process.env.BASE_URL_REST;
 
@@ -8,21 +9,20 @@ describe('Role Permissions', () => {
   let businessToken;
 
   before(async () => {
-
-    // Registra e faz login de um usuário "business"
+    // Gera um novo usuário random do tipo business
+    const novoUsuario = gerarUsuario('business');
+    // Registra o novo usuário
     await request(baseUrl)
       .post('/auth/register')
+      .set('Content-Type', 'application/json')
+      .send(novoUsuario);
+    // Faz login com o novo usuário
+    const businessLogin = await request(baseUrl)
+      .post('/auth/login')
       .send({
-            username: 'businessUser',
-            password: 'password123',
-            role: 'business'
-            });
-    const businessLogin = await request(baseUrl).post('/auth/login')
-      .send({
-            username: 'businessUser',
-            password: 'password123'
-            });
-
+        username: novoUsuario.username,
+        password: novoUsuario.password
+      });
     businessToken = businessLogin.body.token;
   });
 
@@ -30,58 +30,52 @@ describe('Role Permissions', () => {
   describe('BUSINESS /business/categories', () => {
     
     it('Confirma que usuario de tipo business pode acessar POST endpoints', async () => {
-    const resposta = await request(baseUrl)
-      .post('/business/categories')
-      .set('Authorization', `Bearer ${businessToken}`)
-      .send({
+      const resposta = await request(baseUrl)
+        .post('/business/categories')
+        .set('Authorization', `Bearer ${businessToken}`)
+        .send({
           name: "beleza"
-          });
-
+        });
       expect(resposta.status).to.equal(201);
-      expect(resposta.body.message).to.equal('Category created successfully')
-
+      expect(resposta.body.message).to.equal('Category created successfully');
     });
 
     it('Confirma que usuario de tipo business pode acessar PUT endpoints', async () => {
-    const resposta = await request(baseUrl)
-      .put('/business/categories')
-      .set('Authorization', `Bearer ${businessToken}`)
-      .send({
+      const resposta = await request(baseUrl)
+        .put('/business/categories')
+        .set('Authorization', `Bearer ${businessToken}`)
+        .send({
           id: 3,
           name: "fitness"
-          });
-          
+        });
       expect(resposta.status).to.equal(200);
-      expect(resposta.body.message).to.equal('Category updated successfully')
+      expect(resposta.body.message).to.equal('Category updated successfully');
     });
 
     it('Confirma que usuario de tipo business pode acessar DELETE endpoints', async () => {
-    const resposta = await request(baseUrl)
-      .delete('/business/categories')
-      .set('Authorization', `Bearer ${businessToken}`)
-      .query({
+      const resposta = await request(baseUrl)
+        .delete('/business/categories')
+        .set('Authorization', `Bearer ${businessToken}`)
+        .query({
           id: 3
-          });
-          
+        });
       expect(resposta.status).to.equal(200);
-      expect(resposta.body.message).to.equal('Category deleted successfully')
-     });
+      expect(resposta.body.message).to.equal('Category deleted successfully');
+    });
 
     it('Confirma que usuario de tipo business pode acessar GET endpoints', async () => {
-
-        const resposta = await request(baseUrl)
-          .get('/business/categories')
-          .set('Authorization', `Bearer ${businessToken}`)
-
-          expect(resposta.status).to.equal(200);
-          expect(resposta.body).to.be.an('array').that.is.not.empty;
-          resposta.body.forEach(item => {
-            expect(item).to.have.property('id');
-            expect(item.id).to.be.a('number');
-            expect(item).to.have.property('name');
-            expect(item.name).to.be.a('string')
-          });
+      const resposta = await request(baseUrl)
+        .get('/business/categories')
+        .set('Authorization', `Bearer ${businessToken}`);
+      expect(resposta.status).to.equal(200);
+      expect(resposta.body).to.be.an('array').that.is.not.empty;
+      resposta.body.forEach(item => {
+        expect(item).to.have.property('id');
+        expect(item.id).to.be.a('number');
+        expect(item).to.have.property('name');
+        expect(item.name).to.be.a('string');
       });
+    });
   });
 
   //***TESTS BUSINESS business/businesses***

@@ -6,30 +6,26 @@ const postLogin = require('./fixtures/postLogin.json')
 describe('User Login', () => {
     describe('POST /auth/login', () => {
         it('Deve retornar 200 com um token em string quando usar credenciais validas', async () => {
-            const bodyLogin = { ...postLogin }
-
+            const bodyLogin = { ...postLogin };
             const resposta = await request(process.env.BASE_URL_REST)
                 .post('/auth/login')
                 .set('Content-Type', 'application/json')
-                .send(bodyLogin)
-
+                .send(bodyLogin);
             expect(resposta.status).to.equal(200);
-            expect(resposta.body.token).to.be.a('string')
-        })
+            expect(resposta.body.token).to.be.a('string');
+        });
 
-         it('Login com usuario não registrado e retorna 401 com mensagem de erro', async () => {
-
+        it('Login com usuario não registrado e retorna 401 com mensagem de erro', async () => {
             const resposta = await request(process.env.BASE_URL_REST)
-            .post('/auth/login')
-            .set('Content-Type', 'application/json')
-            .send({
+                .post('/auth/login')
+                .set('Content-Type', 'application/json')
+                .send({
                     username: 'usuarioInvalido',
                     password: '222222'
-            })
-            //console.log(resposta.body);
+                });
             expect(resposta.status).to.equal(401);
             expect(resposta.body.message).to.equal('Invalid credentials');
-            expect(resposta.body).to.not.have.property('token')
-        })
-    })
-})
+            expect(resposta.body).to.not.have.property('token');
+        });
+    });
+});
