@@ -13,7 +13,6 @@ jobs:
     #Variaveis
     env: 
       BASE_URL_REST: 'http://localhost:3000'
-      PORT: 4000
 
     # Açõoes e passos
     steps: 
