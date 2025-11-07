@@ -18,7 +18,7 @@ jobs:
     # Açõoes e passos
     steps: 
     
-      # Projeto
+      # Projeto Local Business
       - name: Checkout do Repositório
         uses: actions/checkout@v4
       #dep do projeto
