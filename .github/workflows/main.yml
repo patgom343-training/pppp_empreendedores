@@ -1,0 +1,36 @@
+nome: CI Local Business
+
+#Gatilho
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  tests:
+
+    #Config SO
+    runs-on: ubuntu-latest
+
+    #Variaveis
+    env: 
+      BASE_URL_REST: 'http://localhost:3000'
+      PORT: 4000
+
+    # Açõoes e passos
+    steps: 
+    
+      # Projeto
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+      #dep do projeto
+      - name: Instalando as dependências 
+        run: npm install
+
+      - name: Iniciar o servidor de mocks
+        run: npm run mock-server
+
+      - name: Iniciar o servidor de aplicacao
+        run: npm run start &
+
+      - name: Executar os testes
+        run: npm test
