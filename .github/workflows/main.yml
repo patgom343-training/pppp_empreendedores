@@ -34,6 +34,15 @@ jobs:
         run: npx mocha tests/apiRest/**/*.test.js --timeout 10000 --reporter mochawesome --reporter-options reportDir=mochawesome-report,reportFilename0index,reportJson=true
         continue-on-error: true
 
+      - name: verificar conteúdo do relatório
+        run: ls -R mochawesome-report || echo "Relatório não encontrado"
+
+      - name: upload do relatório  Mochawesome
+        uses: actions/upload-artifact@va
+        with:
+          name: mochawesome-report
+          path: mochawesome-report/
+
         
 
         
