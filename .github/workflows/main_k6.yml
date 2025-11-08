@@ -1,0 +1,35 @@
+name: CI Autometed tests K6 Perfomance 
+
+#Gatilho
+on: 
+  workflow_dispatch:
+
+jobs:
+  tests:
+
+    #Config SO
+    runs-on: ubuntu-latest
+
+    #Variaveis
+    env: 
+      BASE_URL_REST: 'http://localhost:3000'
+
+    # Açõoes e passos
+    steps: 
+    
+      # Projeto Local Business
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+      #dep do projeto
+      - name: Instalando as dependências 
+        run: npm install
+
+      - name: Iniciar o servidor de aplicacao
+        run: npm run start &
+
+      - name: Executar todos os testes K6
+        run: |
+            sleep 5
+            for file in tests/testK6/*.js; do
+              k6 run "$file"
+            done
